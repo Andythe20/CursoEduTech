@@ -3,6 +3,7 @@ package com.example.Cursos.Model;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,14 +22,18 @@ import lombok.NoArgsConstructor;
 @Table(name = "categoria")
 public class Categoria {
     
+    public Categoria(long idCategoria) {
+        this.idCategoria = idCategoria;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_categoria")
     private long idCategoria;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, name = "nombre_categoria")
     private String nombreCat;
 
-    @OneToMany(mappedBy = "categoria", orphanRemoval = true)
-    private List<Curso> cursos = new ArrayList<>();
+    @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Curso> cursos = new ArrayList<Curso>();
 }

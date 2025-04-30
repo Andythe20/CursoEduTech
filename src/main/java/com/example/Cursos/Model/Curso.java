@@ -50,7 +50,7 @@ public class Curso {
     private long idInstructor;
     
     @ManyToOne
-    @JoinColumn(name = "id_categoria",referencedColumnName = "id_categoria", nullable = false)
+    @JoinColumn(name = "id_categoria")
     private Categoria categoria;
 
 }

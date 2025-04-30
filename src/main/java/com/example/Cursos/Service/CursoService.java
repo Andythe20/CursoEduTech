@@ -31,8 +31,35 @@ public class CursoService {
         return repositorio.findByName(nombre);
     }
 
+    //verificar el curso
+    public boolean isValidCurso(Curso c){
+        if (c.getNombreCurso() != null && !c.getNombreCurso().isEmpty() &&
+            c.getDescripcion() != null && !c.getDescripcion().isEmpty() &&
+            c.getNivel() != null && !c.getNivel().isEmpty() &&
+            c.getPrecio() > 0 &&
+            c.getDuracionHoras() > 0 &&
+            c.getIdioma() != null && !c.getIdioma().isEmpty() &&
+            c.getIdInstructor() > 0 &&
+            c.getCategoria() != null){
+            return true;
+        }
+        return false;
+    }
+
     //guardar curso
     public Curso save(Curso curso){
+        //validar el curso
+        if (!isValidCurso(curso)){
+            return null;
+        }
+
+        //verificar si el curso ya existe
+        List<Curso> cursos = repositorio.findAll();
+        for (Curso c : cursos) {
+            if (c.getIdCurso() == curso.getIdCurso()) {
+                return null;
+            }
+        }
         return repositorio.save(curso);
     }
 

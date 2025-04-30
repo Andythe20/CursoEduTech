@@ -1,73 +1,17 @@
 package com.example.Cursos.Repository;
 
-import java.util.ArrayList;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.example.Cursos.Model.Categoria;
 
 @Repository
-public class CategoriaRepository {
-    private ArrayList<Categoria> categorias = new ArrayList<>();
-
-    //listar categorias
-    public ArrayList<Categoria> listarCategorias(){
-        return categorias;
-    }
-
-    //buscar por id
-    public Categoria buscarIdCategoria(int id){
-        for (Categoria c : categorias) {
-            if (c.getIdCategoria() == id) {
-                return c;
-            }
-        }
-        return null;
-    }
-
-    //buscar por nombre
-    public Categoria buscarNombreCategoria(String nombre){
-        for (Categoria c : categorias) {
-            if (c.getNombreCat().equalsIgnoreCase(nombre)) {
-                return c;
-            }
-        }
-        return null;
-    }
-
-    //actualizar
-    public Categoria actualizarCategoria(Categoria categoria){
-        for (Categoria c : categorias) {
-            if (c.getIdCategoria() == categoria.getIdCategoria()) {
-                c.setNombreCat(categoria.getNombreCat());
-                return c;
-            }
-        }
-        return null;
-    }
-
-    //eliminar
-    public Categoria eliminarCategoria(int id){
-        for (Categoria c : categorias) {
-            if (c.getIdCategoria() == id) {
-                categorias.remove(c);
-                return null;
-            }
-        }
-        return new Categoria();
-    }
-
-    //agregar
-    public Categoria agregarCategoria(Categoria categoria){
-        for (Categoria c : categorias) {
-            if (c.getIdCategoria() == categoria.getIdCategoria()) {
-                return null;
-            }
-        }
-        categorias.add(categoria);
-        return categoria;
-    }
-
+public interface CategoriaRepository extends JpaRepository<Categoria, Long> {
     
+    @Query("SELECT c FROM Categoria c WHERE c.nombreCat = :nombre")
+    Categoria findByName(@Param("nombre") String nombre);
 
 }
