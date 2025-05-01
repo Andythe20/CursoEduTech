@@ -23,7 +23,8 @@ public class CursoService {
 
     //buscar por id
     public Curso findById(long id){
-        return repositorio.findById(id).get();
+        return repositorio.findByIdWithCategoria(id)
+        .orElseThrow(() -> new RuntimeException("Curso no encontrado"));
     }
     
     //buscar por nombre
