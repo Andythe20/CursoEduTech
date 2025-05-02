@@ -28,8 +28,8 @@ public class CursoService {
     }
     
     //buscar por nombre
-    public Curso findByName(String nombre){
-        return repositorio.findByName(nombre);
+    public Curso findByName(String nombreCurso){
+        return repositorio.findByNombreCurso(nombreCurso);
     }
 
     //verificar el curso
@@ -51,14 +51,14 @@ public class CursoService {
     public Curso save(Curso curso){
         //validar el curso
         if (!isValidCurso(curso)){
-            return null;
+            throw new IllegalArgumentException("Curso no valido");
         }
 
         //verificar si el curso ya existe
         List<Curso> cursos = repositorio.findAll();
         for (Curso c : cursos) {
             if (c.getIdCurso() == curso.getIdCurso()) {
-                return null;
+                throw new RuntimeException("Curso ya existe");
             }
         }
         return repositorio.save(curso);

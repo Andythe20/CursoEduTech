@@ -22,11 +22,11 @@ public class CategoriaService {
     }
 
     public Categoria findById(long id) {
-        return repositorio.findById(id).get();
+        return repositorio.findById(id).orElseThrow(() -> new RuntimeException("Categoria no encontrada"));
     }
 
-    public Categoria findByName(String nombre) {
-        return repositorio.findByName(nombre);
+    public Categoria findByName(String nombreCat) {
+        return repositorio.findByNombreCat(nombreCat);
     }
 
     //verificar la categoria
@@ -40,14 +40,15 @@ public class CategoriaService {
     public Categoria save(Categoria categoria) {
         //validar la categoria
         if (!isValidCategoria(categoria)) {
-            return null;
+            //return null;
+            throw new IllegalArgumentException("Categoria no valida");
         }
 
         //verificar si la categoria ya existe
         List<Categoria> categorias = repositorio.findAll();
         for (Categoria c : categorias) {
             if (c.getIdCategoria() == categoria.getIdCategoria()) {
-                return null;
+                throw new RuntimeException("Categoria ya existe");
             }
         }
         //guardar la categoria

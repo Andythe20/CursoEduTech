@@ -2,8 +2,6 @@ package com.example.Cursos.Repository;
 
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.example.Cursos.Model.Categoria;
@@ -11,7 +9,6 @@ import com.example.Cursos.Model.Categoria;
 @Repository
 public interface CategoriaRepository extends JpaRepository<Categoria, Long> {
     
-    @Query("SELECT c FROM Categoria c WHERE c.nombreCat = :nombre")
-    Categoria findByName(@Param("nombre") String nombre);
+    Categoria findByNombreCat(String nombreCat);
 
 }

@@ -13,9 +13,8 @@ import com.example.Cursos.Model.Curso;
 @Repository
 public interface CursoRepository extends JpaRepository<Curso, Long> {
 
-    //devulve curso por su nombre, JPQL
-    @Query("SELECT c FROM Curso c WHERE c.nombreCurso = :nombre")
-    Curso findByName(@Param("nombre") String nombre);
+    //devulve curso por su nombre
+    Curso findByNombreCurso(@Param("nombreCurso") String nombreCurso);
 
     //devuelve el json con los campos de categoria completos
     @Query("SELECT c FROM Curso c JOIN FETCH c.categoria WHERE c.idCurso = :id")
