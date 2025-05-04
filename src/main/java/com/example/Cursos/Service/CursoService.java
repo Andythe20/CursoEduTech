@@ -72,7 +72,7 @@ public class CursoService {
 
     //eliminar curso por id
     public Curso deleteById(long id){
-        Curso curso = repositorio.findByIdWithCategoria(id)
+        Curso curso = repositorio.findById(id)
         .orElseThrow(() -> new RuntimeException("Curso no encontrado"));
         repositorio.delete(curso);
         return null;
