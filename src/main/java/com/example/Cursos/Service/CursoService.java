@@ -27,7 +27,14 @@ public class CursoService {
     }
     
     //buscar por nombre
-    public Curso findByName(String nombreCurso){
+    public Curso findByNombreCurso(String nombreCurso){
+        if (nombreCurso == null || nombreCurso.isEmpty()){
+            return null;
+        }
+        Curso curso = repositorio.findByNombreCurso(nombreCurso);
+        if (curso == null){
+            return null;
+        }
         return repositorio.findByNombreCurso(nombreCurso);
     }
 
@@ -50,23 +57,43 @@ public class CursoService {
     public Curso save(Curso curso){
         //validar el curso
         if (!isValidCurso(curso)){
-            throw new IllegalArgumentException("Curso no valido");
+            return null;
         }
 
         //verificar si el curso ya existe
         List<Curso> cursos = repositorio.findAll();
         for (Curso c : cursos) {
             if (c.getIdCurso() == curso.getIdCurso()) {
-                throw new RuntimeException("Curso ya existe");
+                return null;
             }
         }
         return repositorio.save(curso);
     }
 
+    //eliminar curso por id
     public Curso deleteById(long id){
         Curso curso = repositorio.findByIdWithCategoria(id)
         .orElseThrow(() -> new RuntimeException("Curso no encontrado"));
         repositorio.delete(curso);
+        return null;
+    }
+
+    //actualizar curso
+    public Curso updateCurso(Curso curso){
+        //validar el curso
+        if (!isValidCurso(curso)){
+            throw new IllegalArgumentException("Curso no valido");
+        }
+
+        //verificar si el curso ya existe para actualizar
+        List<Curso> cursos = repositorio.findAll();
+        for (Curso c : cursos) {
+            if (c.getIdCurso() == curso.getIdCurso()) {
+                //el metodo save de jpa maneja actualizaciones
+                return repositorio.save(curso);
+            }
+        }
+
         return null;
     }
 }
