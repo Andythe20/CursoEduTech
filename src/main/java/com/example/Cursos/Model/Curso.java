@@ -32,7 +32,7 @@ public class Curso {
     private String descripcion;
     
     @Column(nullable=false)
-    private String nivel;
+    private Nivel nivel;
 
     @Column(length = 5, nullable=false)
     private int precio;

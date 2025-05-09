@@ -42,7 +42,7 @@ public class CursoService {
     public boolean isValidCurso(Curso c){
         if (c.getNombreCurso() != null && !c.getNombreCurso().isEmpty() &&
             c.getDescripcion() != null && !c.getDescripcion().isEmpty() &&
-            c.getNivel() != null && !c.getNivel().isEmpty() &&
+            c.getNivel() != null &&
             c.getPrecio() > 0 &&
             c.getDuracionHoras() > 0 &&
             c.getIdioma() != null && !c.getIdioma().isEmpty() &&

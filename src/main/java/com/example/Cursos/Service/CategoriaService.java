@@ -54,4 +54,8 @@ public class CategoriaService {
         //guardar la categoria
         return repositorio.save(categoria);
     }
+
+    public boolean eliminar(Categoria cat){
+        
+    }
 }
