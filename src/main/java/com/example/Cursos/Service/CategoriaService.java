@@ -44,18 +44,12 @@ public class CategoriaService {
             throw new IllegalArgumentException("Categoria no valida");
         }
 
-        //verificar si la categoria ya existe
-        List<Categoria> categorias = repositorio.findAll();
-        for (Categoria c : categorias) {
-            if (c.getIdCategoria() == categoria.getIdCategoria()) {
-                throw new RuntimeException("Categoria ya existe");
-            }
-        }
         //guardar la categoria
         return repositorio.save(categoria);
     }
 
-    public boolean eliminar(Categoria cat){
-        
+    //eliminar categoria
+    public void eliminar(Categoria cat){
+        repositorio.delete(cat);
     }
 }
