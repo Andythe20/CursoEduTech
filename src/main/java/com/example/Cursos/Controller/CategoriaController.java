@@ -84,7 +84,7 @@ public class CategoriaController {
         if (catEncontrada == null) {
             return ResponseEntity.badRequest().build();
         }
-        service.save(cat);
+        service.update(cat);
         return ResponseEntity.ok().body(cat);
     }
 }

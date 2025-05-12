@@ -52,4 +52,15 @@ public class CategoriaService {
     public void eliminar(Categoria cat){
         repositorio.delete(cat);
     }
+
+    public Categoria update(Categoria categoria) {
+        //validar la categoria
+        if (!repositorio.existsById(categoria.getIdCategoria())) {
+            //return null;
+            throw new IllegalArgumentException("Categoria no valida");
+        }
+
+        //guardar la categoria
+        return repositorio.save(categoria);
+    }
 }
