@@ -11,9 +11,13 @@ import com.example.Cursos.Model.Curso;
 @Repository
 public interface CursoRepository extends JpaRepository<Curso, Long> {
 
-    //devulve curso por su nombre
+    //devuelve curso por su nombre
     @Query("SELECT c FROM Curso c WHERE c.nombreCurso = :nombreCurso")
     Curso findByNombreCurso(@Param("nombreCurso") String nombreCurso);
+
+    boolean existsByNombreCurso(String nombreCurso);
+
+    boolean existsByIdCurso(long idCurso);
 
 
     

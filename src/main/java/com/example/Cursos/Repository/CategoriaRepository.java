@@ -10,5 +10,6 @@ import com.example.Cursos.Model.Categoria;
 public interface CategoriaRepository extends JpaRepository<Categoria, Long> {
     
     Categoria findByNombreCat(String nombreCat);
+    boolean existsByNombreCat(String nombreCat);
 
 }

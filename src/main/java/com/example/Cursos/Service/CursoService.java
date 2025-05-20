@@ -38,12 +38,22 @@ public class CursoService {
         return repositorio.findByNombreCurso(nombreCurso);
     }
 
+    //verificar si existe el curso
+    public boolean existsByNombreCurso(String nombreCurso){
+        return repositorio.existsByNombreCurso(nombreCurso);
+    }
+
+    //verificar si existe el curso por id
+    public boolean existsByIdCurso(long idCurso){
+        return repositorio.existsByIdCurso(idCurso);
+    }
+
     //verificar el curso
     public boolean isValidCurso(Curso c){
         if (c.getNombreCurso() != null && !c.getNombreCurso().isEmpty() &&
             c.getDescripcion() != null && !c.getDescripcion().isEmpty() &&
             c.getNivel() != null &&
-            c.getPrecio() > 0 &&
+            c.getPrecio() >= 0 &&
             c.getDuracionHoras() > 0 &&
             c.getIdioma() != null && !c.getIdioma().isEmpty() &&
             c.getIdInstructor() > 0 &&
@@ -72,9 +82,8 @@ public class CursoService {
 
     //eliminar curso por id
     public Curso deleteById(long id){
-        Curso curso = repositorio.findById(id)
-        .orElseThrow(() -> new RuntimeException("Curso no encontrado"));
-        repositorio.delete(curso);
+        
+        repositorio.deleteById(id);
         return null;
     }
 
@@ -85,15 +94,6 @@ public class CursoService {
             throw new IllegalArgumentException("Curso no valido");
         }
 
-        //verificar si el curso ya existe para actualizar
-        List<Curso> cursos = repositorio.findAll();
-        for (Curso c : cursos) {
-            if (c.getIdCurso() == curso.getIdCurso()) {
-                //el metodo save de jpa maneja actualizaciones
-                return repositorio.save(curso);
-            }
-        }
-
-        return null;
+        return repositorio.save(curso);
     }
 }
