@@ -22,6 +22,7 @@ public class CategoriaController {
     @Autowired
     private CategoriaService service;
 
+    
     @GetMapping("/")
     public ResponseEntity<List<Categoria>> listar(){
         List<Categoria> categorias = service.findAll();
@@ -33,20 +34,19 @@ public class CategoriaController {
 
     @GetMapping("/id/{id}")
     public ResponseEntity<Categoria> listarIdCategoria(@PathVariable long id){
-        Categoria categoria = service.findById(id);
-        if (categoria == null) {
-            return ResponseEntity.badRequest().build();
+        if (!service.existsById(id)) {
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(categoria);
+        return ResponseEntity.ok(service.findById(id));
     }
 
-    @GetMapping("/nombre/{nombre}")
-    public ResponseEntity<Categoria> listarIdNombre(@PathVariable String nombre){
-        Categoria categoria = service.findByName(nombre);
-        if (categoria == null) {
-            return ResponseEntity.badRequest().build();
+    @GetMapping("/nombre/{nombreCat}")
+    public ResponseEntity<Categoria> listarNombreCategoria(@PathVariable String nombreCat){
+        if (!service.existsByNombreCat(nombreCat)) {
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(categoria);
+        Categoria cat = service.findByNombreCat(nombreCat);
+        return ResponseEntity.ok(cat);
     }
 
     @PostMapping("/")
@@ -58,32 +58,24 @@ public class CategoriaController {
         return ResponseEntity.ok(categoria);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/id/{id}")
     public ResponseEntity<Categoria> eliminarIdCategoria(@PathVariable Long id){
-        Categoria categoria = service.findById(id);
-        if (categoria == null) {
-            return ResponseEntity.badRequest().build();
+        if (!service.existsById(id)) {
+            return ResponseEntity.notFound().build();
         }
-        service.eliminar(categoria);
+
+        service.eliminar(service.findById(id));
         return ResponseEntity.ok().body(null);
     }
 
-    @DeleteMapping("/")
-    public ResponseEntity<Categoria> eliminarCategoria(@RequestBody Categoria cat){
-        Categoria categoria = service.findById(cat.getIdCategoria());
-        if (categoria == null) {
-            return ResponseEntity.badRequest().build();
-        }
-        service.eliminar(categoria);
-        return ResponseEntity.ok().body(null);
-    }
 
     @PutMapping("/")
     public ResponseEntity<Categoria> actualizarCategoria(@RequestBody Categoria cat){
-        Categoria catEncontrada = service.findById(cat.getIdCategoria());
-        if (catEncontrada == null) {
+        if (cat == null) {
             return ResponseEntity.badRequest().build();
-        }
+        } else if (!service.existsById(cat.getIdCategoria())){
+            return ResponseEntity.notFound().build();
+        } 
         service.update(cat);
         return ResponseEntity.ok().body(cat);
     }

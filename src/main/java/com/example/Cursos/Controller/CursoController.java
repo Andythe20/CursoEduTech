@@ -24,15 +24,19 @@ public class CursoController {
 
     @GetMapping("/")
     public ResponseEntity<List<Curso>> listar(){
+
         List<Curso> cursos = cursoService.findAll();
+
         if (cursos.isEmpty()){
             return ResponseEntity.noContent().build();
         }
+
         return ResponseEntity.ok(cursos);
     }
 
     @GetMapping("/id/{id}")
     public ResponseEntity<Curso> listarCursoId(@PathVariable int id){
+
         if (cursoService.findById(id) == null) {
             return ResponseEntity.badRequest().build();
         }
@@ -43,6 +47,7 @@ public class CursoController {
 
     @GetMapping("/nombre/{nombre}")
     public ResponseEntity<Curso> listarCursoNombre(@PathVariable String nombre){
+
         if (cursoService.findByNombreCurso(nombre) == null){
             return ResponseEntity.badRequest().build();
         }
@@ -53,19 +58,22 @@ public class CursoController {
 
     @PostMapping("/")
     public ResponseEntity<Curso> guardar(@RequestBody Curso curso){
+
         if (curso == null){
             return ResponseEntity.badRequest().build();
         }
         cursoService.save(curso);
-        return ResponseEntity.ok(curso);
+        return ResponseEntity.ok(cursoService.findById(curso.getIdCurso()));
         
     }
     
     @DeleteMapping("/id/{id}")
     public ResponseEntity<Curso> eliminar(@PathVariable int id){
-        if (cursoService.findById(id) == null){
-            return ResponseEntity.badRequest().build();
+
+        if (!cursoService.existsByIdCurso(id)){
+            return ResponseEntity.notFound().build();
         }
+        
         cursoService.deleteById(id);
         return ResponseEntity.ok().build();
         
@@ -73,11 +81,17 @@ public class CursoController {
 
     @PutMapping("/")
     public ResponseEntity<Curso> actualizarCurso(@RequestBody Curso curso){
+
         if (curso == null) {
             return ResponseEntity.badRequest().build();
         }
+        
+        if (!cursoService.existsByIdCurso(curso.getIdCurso())) {
+            return ResponseEntity.notFound().build();
+        } 
+
         cursoService.updateCurso(curso);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(cursoService.findById(curso.getIdCurso()));
     }
 
 }
