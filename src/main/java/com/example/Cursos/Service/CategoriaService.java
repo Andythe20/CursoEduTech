@@ -44,7 +44,7 @@ public class CategoriaService {
 
     //verificar si la categoria es valida
     public boolean isValidCategoria(Categoria c) {
-        if (c.getNombreCat() != null && !c.getNombreCat().isEmpty()) {
+        if (c.getNombreCat() == null || c.getNombreCat().isEmpty()) {
             return true;
         }
         return false;
@@ -52,27 +52,13 @@ public class CategoriaService {
 
     //guardar categoria
     public Categoria save(Categoria categoria) {
-        //validar la categoria
-        if (!isValidCategoria(categoria)) {
-            throw new IllegalArgumentException("Categoria no valida");
-        }
-
         return repositorio.save(categoria);
     }
 
     //eliminar categoria
-    public void eliminar(Categoria cat){
-        repositorio.delete(cat);
+    public Categoria deleteById(Long idCategoria){
+        repositorio.deleteById(idCategoria);
+        return null;
     }
 
-    //actualizar categoria
-    public Categoria update(Categoria categoria) {
-
-        if (!repositorio.existsById(categoria.getIdCategoria())) {
-            throw new IllegalArgumentException("Categoria no valida");
-        }
-        
-
-        return repositorio.save(categoria);
-    }
 }

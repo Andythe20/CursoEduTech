@@ -54,6 +54,11 @@ public class CategoriaController {
         if (categoria == null){
             return ResponseEntity.badRequest().build();
         }
+
+        if (service.isValidCategoria(categoria)){
+            return ResponseEntity.badRequest().build();    
+        }
+
         service.save(categoria);
         return ResponseEntity.ok(categoria);
     }
@@ -64,8 +69,7 @@ public class CategoriaController {
             return ResponseEntity.notFound().build();
         }
 
-        service.eliminar(service.findById(id));
-        return ResponseEntity.ok().body(null);
+        return ResponseEntity.ok(service.deleteById(id));
     }
 
 
@@ -73,10 +77,18 @@ public class CategoriaController {
     public ResponseEntity<Categoria> actualizarCategoria(@RequestBody Categoria cat){
         if (cat == null) {
             return ResponseEntity.badRequest().build();
-        } else if (!service.existsById(cat.getIdCategoria())){
-            return ResponseEntity.notFound().build();
         } 
-        service.update(cat);
+        
+        if (!service.existsById(cat.getIdCategoria())){
+            return ResponseEntity.notFound().build();
+        }
+        
+        if (service.isValidCategoria(cat)){
+            return ResponseEntity.badRequest().build();
+            
+        }
+
+        service.save(cat);
         return ResponseEntity.ok().body(cat);
     }
 }
