@@ -33,7 +33,7 @@ public class Categoria {
     @Column(name = "id_categoria")
     private long idCategoria;
 
-    @Column(nullable = false, unique = true, name = "nombre_categoria")
+    @Column(nullable = false, unique = true, length = 1000, name = "nombre_categoria")
     private String nombreCat;
 
     @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL, orphanRemoval = true)

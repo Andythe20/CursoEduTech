@@ -28,7 +28,7 @@ public class Curso {
     @Column(nullable=false, unique = true)
     private String nombreCurso;
     
-    @Column(nullable=false)
+    @Column(nullable=false, length = 1000)
     private String descripcion;
     
     @Column(nullable=false)
