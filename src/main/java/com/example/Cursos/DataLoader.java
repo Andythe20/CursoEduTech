@@ -3,6 +3,7 @@ package com.example.Cursos;
 import net.datafaker.Faker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import com.example.Cursos.Model.Categoria;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Random;
 
 @Component
+@Profile("dev") // Solo se ejecutará en el perfil 'dev'
 public class DataLoader implements CommandLineRunner {
 
     // declarar los repositorios
