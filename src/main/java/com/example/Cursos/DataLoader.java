@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Random;
 
 @Component
-@Profile("dev") // Solo se ejecutará en el perfil 'dev'
+@Profile("test") // Solo se ejecutará en el perfil 'dev'
 public class DataLoader implements CommandLineRunner {
 
     // declarar los repositorios

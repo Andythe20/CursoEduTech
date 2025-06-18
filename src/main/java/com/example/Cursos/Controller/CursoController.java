@@ -16,13 +16,26 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.Cursos.Model.Curso;
 import com.example.Cursos.Service.CursoService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/api/v1/cursos")
+@Tag(name = "Cursos", description = "Operaciones CRUD para gestionar cursos")
 public class CursoController {
     @Autowired
     private CursoService cursoService;
 
     @GetMapping("/")
+    @Operation(summary = "Listar todos los cursos", description = "Obtiene una lista de todos los cursos disponibles")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Lista de cursos obtenida correctamente"),
+        @ApiResponse(responseCode = "204", description = "No se encontraron cursos")
+    })
     public ResponseEntity<List<Curso>> listar(){
 
         List<Curso> cursos = cursoService.findAll();
@@ -35,10 +48,15 @@ public class CursoController {
     }
 
     @GetMapping("/id/{id}")
+    @Operation(summary = "Obtener curso por ID", description = "Obtiene un curso específico por su ID")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Curso encontrado"),
+        @ApiResponse(responseCode = "404", description = "Curso no encontrado")
+    })
     public ResponseEntity<Curso> listarCursoId(@PathVariable int id){
 
         if (cursoService.findById(id) == null) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.notFound().build();
         }
         Curso cursoEncontrado = cursoService.findById(id);
         return ResponseEntity.ok(cursoEncontrado);
@@ -46,10 +64,15 @@ public class CursoController {
     }
 
     @GetMapping("/nombre/{nombre}")
+    @Operation(summary = "Obtener curso por nombre", description = "Obtiene un curso específico por su nombre")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Curso encontrado"),
+        @ApiResponse(responseCode = "404", description = "Curso no encontrado")
+    })
     public ResponseEntity<Curso> listarCursoNombre(@PathVariable String nombre){
 
         if (cursoService.findByNombreCurso(nombre) == null){
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.notFound().build();
         }
         Curso cursoEncontrado = cursoService.findByNombreCurso(nombre);
         return ResponseEntity.ok(cursoEncontrado);
@@ -57,6 +80,13 @@ public class CursoController {
     }
 
     @PostMapping("/")
+    @Operation(summary = "Guardar nuevo curso", description = "Crea un nuevo curso")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "Curso creado correctamente",
+            content = @Content(mediaType = "application/json",
+                               schema = @Schema(implementation = Curso.class))),
+        @ApiResponse(responseCode = "400", description = "Solicitud inválida")
+    })
     public ResponseEntity<Curso> guardar(@RequestBody Curso curso){
 
         if (curso == null){
@@ -68,6 +98,11 @@ public class CursoController {
     }
     
     @DeleteMapping("/id/{id}")
+    @Operation(summary = "Eliminar curso por ID", description = "Elimina un curso específico por su ID")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Curso eliminado correctamente"),
+        @ApiResponse(responseCode = "404", description = "Curso no encontrado")
+    })
     public ResponseEntity<Curso> eliminar(@PathVariable int id){
 
         if (!cursoService.existsByIdCurso(id)){
@@ -80,6 +115,14 @@ public class CursoController {
     }
 
     @PutMapping("/")
+    @Operation(summary = "Actualizar curso", description = "Actualiza un curso existente")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Curso actualizado correctamente",
+            content = @Content(mediaType = "application/json",
+                               schema = @Schema(implementation = Curso.class))),
+        @ApiResponse(responseCode = "400", description = "Solicitud inválida"),
+        @ApiResponse(responseCode = "404", description = "Curso no encontrado")
+    })
     public ResponseEntity<Curso> actualizarCurso(@RequestBody Curso curso){
 
         if (curso == null) {

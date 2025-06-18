@@ -1,5 +1,6 @@
 package com.example.Cursos.Controller;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -13,7 +14,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 import com.example.Cursos.Model.Categoria;
 import com.example.Cursos.Service.CategoriaService;
@@ -53,9 +53,10 @@ public class CategoriaControllerTest {
 
     @Test
     public void testFindById() throws Exception {
-        when(categoriaService.findById(1)).thenReturn(categoria);
+        when(categoriaService.existsById(1L)).thenReturn(true);
+        when(categoriaService.findById(1L)).thenReturn(categoria);
 
-        mockMvc.perform(get("/api/v1/categorias/1"))
+        mockMvc.perform(get("/api/v1/categorias/id/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.idCategoria").value(1))
                 .andExpect(jsonPath("$.nombreCat").value("Tecnología"));
@@ -63,6 +64,7 @@ public class CategoriaControllerTest {
 
     @Test
     public void testFindByNombreCat() throws Exception {
+        when(categoriaService.existsByNombreCat("Tecnología")).thenReturn(true);
         when(categoriaService.findByNombreCat("Tecnología")).thenReturn(categoria);
 
         mockMvc.perform(get("/api/v1/categorias/nombre/Tecnología"))
@@ -86,7 +88,8 @@ public class CategoriaControllerTest {
 
     @Test
     public void testDeleteById() throws Exception {
-        doNothing().when(categoriaService).deleteById(1L);
+        when(categoriaService.existsById(1L)).thenReturn(true);
+        when(categoriaService.deleteById(1L)).thenReturn(null);
         
         mockMvc.perform(delete("/api/v1/categorias/id/1"))
                 .andExpect(status().isOk());
@@ -95,5 +98,4 @@ public class CategoriaControllerTest {
     }
 
     
-
 }
