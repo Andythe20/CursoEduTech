@@ -116,7 +116,7 @@ public class CategoriaServiceTest {
         categoriaService.deleteById(1L);
 
         // Verifica que el método deleteById() se haya llamado correctamente.
-        assertEquals(true, categoriaService.existsById(1));
+        assertEquals(true, categoriaService.deleteById(1L));
     }
 
     @Test

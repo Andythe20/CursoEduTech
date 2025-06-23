@@ -71,12 +71,10 @@ public class CursoService {
         }
 
         //verificar si el curso ya existe
-        List<Curso> cursos = repositorio.findAll();
-        for (Curso c : cursos) {
-            if (c.getIdCurso() == curso.getIdCurso()) {
-                return null;
-            }
+        if(existsByIdCurso(curso.getIdCurso())){
+            return null;
         }
+        
         return repositorio.save(curso);
     }
 
