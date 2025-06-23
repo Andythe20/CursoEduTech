@@ -36,7 +36,7 @@ public class CategoriaControllerTest {
     @BeforeEach
     void SetUp() {
         categoria = new Categoria();
-        categoria.setIdCategoria(1);
+        categoria.setIdCategoria(1L);
         categoria.setNombreCat("Tecnología");
         
     }

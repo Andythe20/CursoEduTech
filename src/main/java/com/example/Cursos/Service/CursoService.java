@@ -44,8 +44,8 @@ public class CursoService {
     }
 
     //verificar si existe el curso por id
-    public boolean existsByIdCurso(long idCurso){
-        return repositorio.existsByIdCurso(idCurso);
+    public boolean existsById(long idCurso){
+        return repositorio.existsById(idCurso);
     }
 
     //verificar el curso
@@ -64,17 +64,7 @@ public class CursoService {
     }
 
     //guardar curso
-    public Curso save(Curso curso){
-        //validar el curso
-        if (!isValidCurso(curso)){
-            return null;
-        }
-
-        //verificar si el curso ya existe
-        if(existsByIdCurso(curso.getIdCurso())){
-            return null;
-        }
-        
+    public Curso save(Curso curso){        
         return repositorio.save(curso);
     }
 

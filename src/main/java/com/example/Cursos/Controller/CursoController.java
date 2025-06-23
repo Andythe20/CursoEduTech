@@ -93,7 +93,7 @@ public class CursoController {
             return ResponseEntity.badRequest().build();
         }
         cursoService.save(curso);
-        return ResponseEntity.ok(cursoService.findById(curso.getIdCurso()));
+        return ResponseEntity.ok(curso);
         
     }
     
@@ -103,14 +103,13 @@ public class CursoController {
         @ApiResponse(responseCode = "200", description = "Curso eliminado correctamente"),
         @ApiResponse(responseCode = "404", description = "Curso no encontrado")
     })
-    public ResponseEntity<Curso> eliminar(@PathVariable int id){
+    public ResponseEntity<Curso> eliminar(@PathVariable Long id){
 
-        if (!cursoService.existsByIdCurso(id)){
+        if (!cursoService.existsById(id)){
             return ResponseEntity.notFound().build();
         }
         
-        cursoService.deleteById(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(cursoService.deleteById(id));
         
     }
 
@@ -129,7 +128,7 @@ public class CursoController {
             return ResponseEntity.badRequest().build();
         }
         
-        if (!cursoService.existsByIdCurso(curso.getIdCurso())) {
+        if (!cursoService.existsById(curso.getIdCurso())) {
             return ResponseEntity.notFound().build();
         } 
 
