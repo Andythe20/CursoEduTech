@@ -67,9 +67,9 @@ public class CursoServiceTest {
 
     @Test
     public void existsByIdCursoTest() {
-        when(cursoRepository.existsByIdCurso(1L)).thenReturn(true);
+        when(cursoRepository.existsById(1L)).thenReturn(true);
 
-        boolean exists = cursoService.existsByIdCurso(1L);
+        boolean exists = cursoService.existsById(1L);
 
         assertEquals(true, exists);
     }
@@ -90,7 +90,7 @@ public class CursoServiceTest {
     public void deleteByIdTest() {
         
         // Verifica que el método deleteById del repositorio haya sido llamado con el id correcto
-        when(cursoRepository.existsByIdCurso(1L)).thenReturn(true);
+        when(cursoRepository.existsById(1L)).thenReturn(true);
         
         cursoService.deleteById(1L);
         
