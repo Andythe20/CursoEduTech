@@ -12,7 +12,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 import com.example.Cursos.Service.CursoService;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import com.example.Cursos.Model.Curso; 
 import com.example.Cursos.assemblers.cursoModelAssembler;
 
@@ -26,5 +25,54 @@ public class CursoControllerV2 {
     @Autowired
     private cursoModelAssembler assembler;
 
-    
+    @GetMapping(produces = MediaTypes.HAL_JSON_VALUE)
+    public CollectionModel<EntityModel<Curso>> getAllCursos() {
+        List<EntityModel<Curso>> cursos = cursoService.findAll().stream()
+                .map(assembler::toModel)
+                .toList();
+        
+        return CollectionModel.of(cursos,
+                linkTo(methodOn(CursoControllerV2.class).getAllCursos()).withSelfRel());
+    }
+
+    @GetMapping(value = "/id/{id}", produces = MediaTypes.HAL_JSON_VALUE)
+    public EntityModel<Curso> getCursoById(@PathVariable long id) {
+        Curso curso = cursoService.findById(id);
+        if (curso == null) {
+            return null;
+        }
+        
+        return assembler.toModel(curso);
+    }
+
+    @PostMapping(produces = MediaTypes.HAL_JSON_VALUE)
+    public ResponseEntity<EntityModel<Curso>> createCurso(@RequestBody Curso curso) {
+        Curso createdCurso = cursoService.save(curso);
+        
+        return ResponseEntity.created(linkTo(methodOn(CursoControllerV2.class).getCursoById(createdCurso.getIdCurso())).toUri())
+                .body(assembler.toModel(createdCurso));
+    }
+
+    @PutMapping(value = "/id/{id}", produces = MediaTypes.HAL_JSON_VALUE)
+    public ResponseEntity<EntityModel<Curso>> updateCurso(@PathVariable long id, @RequestBody Curso curso) {
+        
+        if (!cursoService.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+        
+        curso.setIdCurso(id);
+        Curso updatedCurso = cursoService.save(curso);
+        
+        return ResponseEntity.ok(assembler.toModel(updatedCurso));
+    }
+
+    @DeleteMapping(value = "/id/{id}", produces = MediaTypes.HAL_JSON_VALUE)
+    public ResponseEntity<?> deleteCurso(@PathVariable long id) {
+        if (!cursoService.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+        
+        cursoService.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
 }

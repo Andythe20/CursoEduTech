@@ -41,7 +41,7 @@ public class CategoriaControllerV2 {
     public EntityModel<Categoria> getCategoriaById(@PathVariable long id) {
         Categoria categoria = service.findById(id);
         if (categoria == null) {
-            return null; // or throw an exception
+            return null;
         }
         
         return assembler.toModel(categoria);
