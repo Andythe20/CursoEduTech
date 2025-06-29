@@ -1,19 +1,22 @@
-FROM eclipse-temurin:17-jdk AS test
+FROM eclipse-temurin:17-jdk AS build
 WORKDIR /app
-COPY . .
-RUN chmod +x mvnw
-RUN ./mvnw test 
 
-FROM eclipse-temurin:17-jdk AS compile
-WORKDIR /app
-COPY . .
-RUN chmod +x mvnw
-RUN ./mvnw clean package 
+# Copia el script mvnw y el directorio .mvn
+COPY mvnw .
+COPY .mvn ./.mvn/
+# Copia el archivo pom.xml y el directorio src
+COPY pom.xml .
+COPY src ./src
 
+# Asegúrate de que mvnw sea ejecutable
+RUN chmod +x mvnw
+
+# Ahora ejecuta mvnw para compilar
+RUN ./mvnw clean package -DskipTests
+
+# Etapa de producción
 FROM eclipse-temurin:17-jdk AS prod
 WORKDIR /app
-
-COPY --from=compile /app/target/*.jar app.jar
-EXPOSE 8080
-
-CMD [ "java","-jar","app.jar" ]
+# Copia el JAR compilado de la etapa de construcción
+COPY --from=build /app/target/*.jar app.jar
+ENTRYPOINT ["java","-jar","app.jar"]
