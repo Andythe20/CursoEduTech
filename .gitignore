@@ -1,37 +1,35 @@
-### Archivos específicos del proyecto ###
-/.env
-/.env.*
-/application-dev.properties
-/application-prod.properties
-*.log
+HELP.md
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
 
-### Archivos generados por el IDE ###
-.idea/
+.env
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
 *.iml
 *.ipr
-*.iws
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
 .vscode/
-*.sw?
-.DS_Store
-
-### Archivos de compilación ###
-/target/
-/bin/
-/build/
-out/
-
-### Archivos de dependencias ###
-*.jar
-*.war
-*.ear
-*.zip
-*.tar.gz
-
-### Archivos de configuración local ###
-application.properties
-application.yml
-
-### Archivos de sistema ###
-*.orig
-*.bak
-*.rej
