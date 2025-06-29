@@ -8,7 +8,7 @@ COPY . .
 RUN chmod +x mvnw
 
 # Ahora ejecuta mvnw para compilar
-RUN ./mvnw clean package -DskipTests
+RUN ./mvnw clean package
 
 # Etapa de producción
 FROM eclipse-temurin:17-jdk AS prod
