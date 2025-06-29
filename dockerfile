@@ -3,7 +3,7 @@ WORKDIR /app
 
 # Copia primero los archivos del Maven Wrapper
 COPY mvnw .
-COPY .mvn/ .mvn/
+COPY .mvnw/ .mvnw/
 COPY pom.xml .
 
 # Copia el código fuente (esto es opcional aquí, podrías hacerlo después de descargar dependencias)
