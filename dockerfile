@@ -1,25 +1,15 @@
-FROM eclipse-temurin:17-jdk AS build
+FROM eclipse-temurin:17-jdk AS compile
 WORKDIR /app
 
-# Copia primero los archivos del Maven Wrapper
-COPY mvnw .
-COPY .mvnw/ .mvnw/
-COPY pom.xml .
-
-# Copia el código fuente (esto es opcional aquí, podrías hacerlo después de descargar dependencias)
-COPY src src
-
-# Asegúrate de que mvnw sea ejecutable
+COPY . .
 RUN chmod +x mvnw
+RUN ./mvnw clean package #-DskipTests
 
-# Descarga las dependencias primero (esto crea una capa caché)
-RUN ./mvnw dependency:go-offline
-
-# Ahora compila el proyecto
-RUN ./mvnw clean package
-
-# Etapa de producción
-FROM eclipse-temurin:17-jdk AS prod
+FROM eclipse-temurin:17-jdk AS production
 WORKDIR /app
-COPY --from=build /app/target/*.jar app.jar
-ENTRYPOINT ["java","-jar","app.jar"]
+
+COPY --from=compile /app/target/*.jar app.jar
+
+EXPOSE 8080
+
+ENTRYPOINT ["java", "-jar", "app.jar"]
