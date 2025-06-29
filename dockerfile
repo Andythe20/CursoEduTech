@@ -2,11 +2,7 @@ FROM eclipse-temurin:17-jdk AS build
 WORKDIR /app
 
 # Copia el script mvnw y el directorio .mvn
-COPY mvnw .
-COPY .mvn ./.mvn/
-# Copia el archivo pom.xml y el directorio src
-COPY pom.xml .
-COPY src ./src
+COPY . .
 
 # Asegúrate de que mvnw sea ejecutable
 RUN chmod +x mvnw
