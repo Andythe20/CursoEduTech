@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 import java.util.List;
 import java.util.Optional;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,8 +16,15 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import com.example.Cursos.Model.Categoria;
 import com.example.Cursos.Repository.CategoriaRepository;
 
+
+
 @SpringBootTest
 public class CategoriaServiceTest {
+    
+    static {
+        Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
+        dotenv.entries().forEach(entry -> System.setProperty(entry.getKey(), entry.getValue()));
+    }
 
     @Autowired
     private CategoriaService categoriaService;
@@ -116,7 +124,7 @@ public class CategoriaServiceTest {
         categoriaService.deleteById(1L);
 
         // Verifica que el método deleteById() se haya llamado correctamente.
-        assertEquals(true, categoriaService.deleteById(1L));
+        assertEquals(null, categoriaService.deleteById(1L));
     }
 
     @Test

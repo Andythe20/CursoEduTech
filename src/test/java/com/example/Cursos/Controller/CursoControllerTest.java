@@ -1,6 +1,7 @@
 package com.example.Cursos.Controller;
 
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -135,7 +136,7 @@ public class CursoControllerTest {
         when(cursoService.existsById(1L)).thenReturn(true);
         when(cursoService.deleteById(1L)).thenReturn(null);
 
-        mockMvc.perform(get("/api/v1/cursos/id/1"))
+        mockMvc.perform(delete("/api/v1/cursos/id/1"))
                 .andExpect(status().isOk());
         
 

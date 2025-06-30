@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Random;
 
 @Component
-@Profile("dev")
+@Profile("test")
 public class DataLoader implements CommandLineRunner {
 
     // declarar los repositorios
