@@ -34,7 +34,7 @@ public class CursoServiceTest {
 
     @Test
     public void testFindAll() {
-        when(cursoRepository.findAll()).thenReturn(List.of(new Curso(1L,"Python 1", "Curso para aprender Python", Nivel.PRINCIPIANTE, 2990, 20, "Español", true, 5, null)));
+        when(cursoRepository.findAll()).thenReturn(List.of(new Curso(1L,"Python 1", "Curso para aprender Python", Nivel.PRINCIPIANTE, 2990, 20, "Español", true, 5, null, null)));
 
         List<Curso> cursos = cursoService.findAll();
 
@@ -44,7 +44,7 @@ public class CursoServiceTest {
 
     @Test
     public void findByIdTest() {
-        when(cursoRepository.findById(1L)).thenReturn(Optional.of(new Curso(1L,"Python 1", "Curso para aprender Python", Nivel.PRINCIPIANTE, 2990, 20, "Español", true, 5, null)));
+        when(cursoRepository.findById(1L)).thenReturn(Optional.of(new Curso(1L,"Python 1", "Curso para aprender Python", Nivel.PRINCIPIANTE, 2990, 20, "Español", true, 5, null, null)));
 
         Curso curso = cursoService.findById(1L);
 
@@ -54,7 +54,7 @@ public class CursoServiceTest {
 
     @Test
     public void findByNombreCursoTest() {
-        when(cursoRepository.findByNombreCurso("Python 1")).thenReturn(new Curso(1L,"Python 1", "Curso para aprender Python", Nivel.PRINCIPIANTE, 2990, 20, "Español", true, 5, null));
+        when(cursoRepository.findByNombreCurso("Python 1")).thenReturn(new Curso(1L,"Python 1", "Curso para aprender Python", Nivel.PRINCIPIANTE, 2990, 20, "Español", true, 5, null, null));
 
         Curso curso = cursoService.findByNombreCurso("Python 1");
 
@@ -83,7 +83,7 @@ public class CursoServiceTest {
     @Test
     public void saveTest() {
         Categoria categoria = new Categoria(1, "Tecnología", null);
-        Curso curso = new Curso(1L,"Python 1", "Curso para aprender Python", Nivel.PRINCIPIANTE, 2990, 20, "Español", true, 5, categoria);
+        Curso curso = new Curso(1L,"Python 1", "Curso para aprender Python", Nivel.PRINCIPIANTE, 2990, 20, "Español", true, 5, null,categoria);
         when(cursoRepository.save(curso)).thenReturn(curso);
 
         Curso savedCurso = cursoService.save(curso);

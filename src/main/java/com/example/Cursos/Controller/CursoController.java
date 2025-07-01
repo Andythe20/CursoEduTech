@@ -3,6 +3,7 @@ package com.example.Cursos.Controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,10 +12,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.Cursos.Model.Curso;
+import com.example.Cursos.Model.DTO.UserDTO;
 import com.example.Cursos.Service.CursoService;
+import com.example.Cursos.Service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -27,8 +31,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RequestMapping("/api/v1/cursos")
 @Tag(name = "Cursos", description = "Operaciones CRUD para gestionar cursos")
 public class CursoController {
+
     @Autowired
     private CursoService cursoService;
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/")
     @Operation(summary = "Listar todos los cursos", description = "Obtiene una lista de todos los cursos disponibles")
@@ -87,14 +95,26 @@ public class CursoController {
                                schema = @Schema(implementation = Curso.class))),
         @ApiResponse(responseCode = "400", description = "Solicitud inválida")
     })
-    public ResponseEntity<Curso> guardar(@RequestBody Curso curso){
+    public ResponseEntity<Curso> guardar(@RequestBody Curso curso, @RequestParam(value = "idUsuario", required = false) Integer idUsuario){
 
         if (curso == null){
             return ResponseEntity.badRequest().build();
         }
+
+        if (idUsuario != null) {
+            try {
+                UserDTO user = userService.getUserById(idUsuario);
+                curso.setIdInstructor(user.getIdUsuario());
+                curso.setNombreInstructor(user.getNombreUsuario() + " " + user.getApellidoUsuario());
+                
+            } catch (Exception e) {
+                return ResponseEntity.badRequest().body(null);
+            }
+            
+        }
         cursoService.save(curso);
-        return ResponseEntity.ok(curso);
-        
+        return ResponseEntity.status(HttpStatus.CREATED).body(curso);
+
     }
     
     @DeleteMapping("/id/{id}")

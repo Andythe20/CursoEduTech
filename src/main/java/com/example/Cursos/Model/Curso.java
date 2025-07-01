@@ -46,9 +46,12 @@ public class Curso {
     @Column(nullable=false)
     private boolean certificadoDisponible;
     
-    @Column(nullable=false)
-    private long idInstructor;
-    
+    @Column(nullable=true)
+    private int idInstructor;
+
+    @Column(nullable=true)
+    private String nombreInstructor;
+
     @ManyToOne
     @JoinColumn(name = "id_categoria")
     private Categoria categoria;

@@ -51,7 +51,7 @@ public class CursoControllerTest {
         curso.setDuracionHoras(20);
         curso.setIdioma("Español");
         curso.setCertificadoDisponible(false);
-        curso.setIdInstructor(5L);
+        curso.setIdInstructor(5);
         curso.setCategoria(categoria);
     }
 
