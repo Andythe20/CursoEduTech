@@ -21,6 +21,7 @@ import com.example.Cursos.Model.Categoria;
 import com.example.Cursos.Model.Curso;
 import com.example.Cursos.Model.Nivel;
 import com.example.Cursos.Service.CursoService;
+import com.example.Cursos.Service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebMvcTest(CursoController.class)
@@ -31,6 +32,9 @@ public class CursoControllerTest {
 
     @MockBean
     private CursoService cursoService;
+
+    @MockBean
+    private UserService userService;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -52,6 +56,7 @@ public class CursoControllerTest {
         curso.setIdioma("Español");
         curso.setCertificadoDisponible(false);
         curso.setIdInstructor(5);
+        curso.setNombreInstructor("Luis Maulen");
         curso.setCategoria(categoria);
     }
 
@@ -70,6 +75,7 @@ public class CursoControllerTest {
                         .andExpect(jsonPath("$[0].idioma").value("Español"))
                         .andExpect(jsonPath("$[0].certificadoDisponible").value(false))
                         .andExpect(jsonPath("$[0].idInstructor").value(5))
+                        .andExpect(jsonPath("$[0].nombreInstructor").value("Luis Maulen"))
                         .andExpect(jsonPath("$[0].categoria.idCategoria").value(1));
     }
 
@@ -89,6 +95,7 @@ public class CursoControllerTest {
                         .andExpect(jsonPath("$.idioma").value("Español"))
                         .andExpect(jsonPath("$.certificadoDisponible").value(false))
                         .andExpect(jsonPath("$.idInstructor").value(5))
+                        .andExpect(jsonPath("$.nombreInstructor").value("Luis Maulen"))
                         .andExpect(jsonPath("$.categoria.idCategoria").value(1));
     }
 
@@ -108,6 +115,7 @@ public class CursoControllerTest {
                         .andExpect(jsonPath("$.idioma").value("Español"))
                         .andExpect(jsonPath("$.certificadoDisponible").value(false))
                         .andExpect(jsonPath("$.idInstructor").value(5))
+                        .andExpect(jsonPath("$.nombreInstructor").value("Luis Maulen"))
                         .andExpect(jsonPath("$.categoria.idCategoria").value(1));
     }
 
@@ -118,7 +126,7 @@ public class CursoControllerTest {
         mockMvc.perform(post("/api/v1/cursos/")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(curso)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.idCurso").value(1))
                 .andExpect(jsonPath("$.nombreCurso").value("Python 1"))
                 .andExpect(jsonPath("$.descripcion").value("Python para principiantes"))
@@ -128,6 +136,7 @@ public class CursoControllerTest {
                 .andExpect(jsonPath("$.idioma").value("Español"))
                 .andExpect(jsonPath("$.certificadoDisponible").value(false))
                 .andExpect(jsonPath("$.idInstructor").value(5))
+                .andExpect(jsonPath("$.nombreInstructor").value("Luis Maulen"))
                 .andExpect(jsonPath("$.categoria.idCategoria").value(1));
     }
 
