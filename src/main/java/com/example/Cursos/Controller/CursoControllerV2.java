@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.*;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 import com.example.Cursos.Service.CursoService;
+import com.example.Cursos.Service.UserService;
 
 import java.util.List;
-import com.example.Cursos.Model.Curso; 
+import com.example.Cursos.Model.Curso;
+import com.example.Cursos.Model.DTO.UserDTO;
 import com.example.Cursos.assemblers.cursoModelAssembler;
 
 @RestController
@@ -24,6 +26,9 @@ public class CursoControllerV2 {
     
     @Autowired
     private cursoModelAssembler assembler;
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping(produces = MediaTypes.HAL_JSON_VALUE)
     public CollectionModel<EntityModel<Curso>> getAllCursos() {
@@ -48,12 +53,27 @@ public class CursoControllerV2 {
     }
 
     @PostMapping(produces = MediaTypes.HAL_JSON_VALUE)
-    public ResponseEntity<EntityModel<Curso>> createCurso(@RequestBody Curso curso) {
-        Curso createdCurso = cursoService.save(curso);
+    public ResponseEntity<EntityModel<Curso>> createCurso(@RequestBody Curso curso, @RequestParam(value = "idUsuario", required = false) Integer idUsuario) {
+        if (curso == null){
+            return ResponseEntity.badRequest().build();
+        }
+
+        if (idUsuario != null) {
+            try {
+                UserDTO user = userService.getUserById(idUsuario);
+                curso.setIdInstructor(user.getIdUsuario());
+                curso.setNombreInstructor(user.getNombreUsuario() + " " + user.getApellidoUsuario());
+                
+            } catch (Exception e) {
+                return ResponseEntity.badRequest().body(null);
+            }
+            // Aquí podrías agregar lógica para buscar el usuario por idUsuario si es necesario
+        }
         
-        return ResponseEntity.created(linkTo(methodOn(CursoControllerV2.class).getCursoById(createdCurso.getIdCurso())).toUri())
-                .body(assembler.toModel(createdCurso)
-                .add(linkTo(methodOn(CursoControllerV2.class).getCursoById(createdCurso.getIdCurso())).withSelfRel())
+        cursoService.save(curso);
+        return ResponseEntity.created(linkTo(methodOn(CursoControllerV2.class).getCursoById(curso.getIdCurso())).toUri())
+                .body(assembler.toModel(curso)
+                .add(linkTo(methodOn(CursoControllerV2.class).getCursoById(curso.getIdCurso())).withSelfRel())
                 .add(linkTo(methodOn(CursoControllerV2.class).getAllCursos()).withRel("cursos")));
     }
 
