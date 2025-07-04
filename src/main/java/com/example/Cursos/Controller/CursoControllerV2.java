@@ -79,6 +79,10 @@ public class CursoControllerV2 {
         }
         
         cursoService.deleteById(id);
-        return ResponseEntity.noContent().build();
+        CollectionModel<EntityModel<Curso>> links = CollectionModel.empty();
+        links.add(linkTo(methodOn(CursoControllerV2.class).getAllCursos()).withRel("cursos"));
+        return ResponseEntity.noContent()
+                .header("Link", linkTo(methodOn(CursoControllerV2.class).getAllCursos()).withRel("cursos").toString())
+                .build();
     }
 }

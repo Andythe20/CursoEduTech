@@ -4,7 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.MediaTypes;
+import org.springframework.hateoas.RepresentationModel;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.ResponseEntity.BodyBuilder;
+import org.springframework.http.ResponseEntity.HeadersBuilder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -55,7 +58,9 @@ public class CategoriaControllerV2 {
         Categoria createdCategoria = service.save(categoria);
 
         return ResponseEntity.created(linkTo(methodOn(CategoriaControllerV2.class).getCategoriaById(createdCategoria.getIdCategoria())).toUri())
-                .body(assembler.toModel(createdCategoria));
+                .body(assembler.toModel(createdCategoria)
+                .add(linkTo(methodOn(CategoriaControllerV2.class).getCategoriaById(createdCategoria.getIdCategoria())).withSelfRel())
+                .add(linkTo(methodOn(CategoriaControllerV2.class).getAllCategorias()).withRel("categorias")));
     }
 
     @PutMapping(value = "/id/{id}", produces = MediaTypes.HAL_JSON_VALUE)
@@ -73,12 +78,16 @@ public class CategoriaControllerV2 {
     }
 
     @DeleteMapping(value = "/id/{id}", produces = MediaTypes.HAL_JSON_VALUE)
-    public ResponseEntity<?> deleteCategoria(@PathVariable long id) {
+    public ResponseEntity<CollectionModel<EntityModel<Categoria>>> deleteCategoria(@PathVariable long id) {
         if (!service.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
         
         service.deleteById(id);
-        return ResponseEntity.noContent().build();
+        CollectionModel<EntityModel<Categoria>> links = CollectionModel.empty();
+        links.add(linkTo(methodOn(CategoriaControllerV2.class).getAllCategorias()).withRel("categorias"));
+        return ResponseEntity.noContent()
+                .header("Link", linkTo(methodOn(CategoriaControllerV2.class).getAllCategorias()).withRel("categorias").toString())
+                .build();
     }
 }
