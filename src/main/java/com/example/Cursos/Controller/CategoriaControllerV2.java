@@ -44,7 +44,9 @@ public class CategoriaControllerV2 {
             return null;
         }
         
-        return assembler.toModel(categoria);
+        return assembler.toModel(categoria)
+                .add(linkTo(methodOn(CategoriaControllerV2.class).getCategoriaById(id)).withSelfRel())
+                .add(linkTo(methodOn(CategoriaControllerV2.class).getAllCategorias()).withRel("categorias"));
     }
     
     @PostMapping(produces = MediaTypes.HAL_JSON_VALUE)
@@ -65,7 +67,9 @@ public class CategoriaControllerV2 {
         categoria.setIdCategoria(id);
         Categoria updatedCategoria = service.save(categoria);
         
-        return ResponseEntity.ok(assembler.toModel(updatedCategoria));
+        return ResponseEntity.ok(assembler.toModel(updatedCategoria)
+                .add(linkTo(methodOn(CategoriaControllerV2.class).getCategoriaById(id)).withSelfRel())
+                .add(linkTo(methodOn(CategoriaControllerV2.class).getAllCategorias()).withRel("categorias")));
     }
 
     @DeleteMapping(value = "/id/{id}", produces = MediaTypes.HAL_JSON_VALUE)

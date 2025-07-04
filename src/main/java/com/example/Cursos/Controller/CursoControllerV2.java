@@ -42,7 +42,9 @@ public class CursoControllerV2 {
             return null;
         }
         
-        return assembler.toModel(curso);
+        return assembler.toModel(curso)
+                .add(linkTo(methodOn(CursoControllerV2.class).getCursoById(id)).withSelfRel())
+                .add(linkTo(methodOn(CursoControllerV2.class).getAllCursos()).withRel("cursos"));
     }
 
     @PostMapping(produces = MediaTypes.HAL_JSON_VALUE)
@@ -50,7 +52,9 @@ public class CursoControllerV2 {
         Curso createdCurso = cursoService.save(curso);
         
         return ResponseEntity.created(linkTo(methodOn(CursoControllerV2.class).getCursoById(createdCurso.getIdCurso())).toUri())
-                .body(assembler.toModel(createdCurso));
+                .body(assembler.toModel(createdCurso)
+                .add(linkTo(methodOn(CursoControllerV2.class).getCursoById(createdCurso.getIdCurso())).withSelfRel())
+                .add(linkTo(methodOn(CursoControllerV2.class).getAllCursos()).withRel("cursos")));
     }
 
     @PutMapping(value = "/id/{id}", produces = MediaTypes.HAL_JSON_VALUE)
@@ -63,7 +67,9 @@ public class CursoControllerV2 {
         curso.setIdCurso(id);
         Curso updatedCurso = cursoService.save(curso);
         
-        return ResponseEntity.ok(assembler.toModel(updatedCurso));
+        return ResponseEntity.ok(assembler.toModel(updatedCurso)
+                .add(linkTo(methodOn(CursoControllerV2.class).getCursoById(id)).withSelfRel())
+                .add(linkTo(methodOn(CursoControllerV2.class).getAllCursos()).withRel("cursos")));
     }
 
     @DeleteMapping(value = "/id/{id}", produces = MediaTypes.HAL_JSON_VALUE)
